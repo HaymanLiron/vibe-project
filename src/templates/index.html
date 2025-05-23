@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>PDF Viewer</title>
+    <style>
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .paragraph {
+        display: none;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PDF Content</h1>
+    <div style="position:relative;">
+      <img id="pdf-image" src="{{ url_for('images', filename='image1.png') }}" alt="Image" />
+      <!-- Four clickable regions -->
+      <div class="overlay" style="width:25%;height:100%;left:0;" data-index="0"></div>
+      <div class="overlay" style="width:25%;height:100%;left:25%;" data-index="1"></div>
+      <div class="overlay" style="width:25%;height:100%;left:50%;" data-index="2"></div>
+      <div class="overlay" style="width:25%;height:100%;left:75%;" data-index="3"></div>
+    </div>
+
+    <div id="text"></div>
+
+    <script>
+      const paragraphs = {{ paragraphs|tojson }};
+      document.querySelectorAll('.overlay').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const idx = parseInt(el.getAttribute('data-index'));
+          const textContainer = document.getElementById('text');
+          textContainer.textContent = paragraphs[idx] || 'No text available';
+          textContainer.classList.add('paragraph');
+        });
+      });
+    </script>
+  </body>
+</html>
